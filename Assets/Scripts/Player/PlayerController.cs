@@ -2,15 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour {
+	[Header("The layer used to identify the ground.")]
 	[SerializeField] LayerMask groundLayer;
+
+	[Header("The position of the ground check.")]
 	[SerializeField] Transform groundCheck;
+
+	[Header("The radius for the ground check. Gizmo mode could help.")]
 	[Range(0f, 0.5f)][SerializeField] float groundCheckRadius = .2f;
+
 	[Range(0, 1000f)][SerializeField] float jumpForce = 400f;
+
+	[Header("Allow the player to control the character in the air.")]
 	[SerializeField] bool airControl = true;
-	[Range(0, .3f)] [SerializeField] private float movementSmoothTime = .05f;
+
+	[Header("How smooth is the character's movement.")]
+	[Range(0, .3f)] [SerializeField] float movementSmoothTime = .05f;
+
+	[Header("Is the player facing right by default?")]
 	[SerializeField] bool isFacingRight = true;
+
+	[Header("A graphical help for developers.")]
 	[SerializeField] bool gizmoMode = false;
+
 	bool isGrounded = true;
 	Rigidbody2D rb;
 	Vector3 velocity = Vector3.zero;
@@ -27,9 +43,9 @@ public class PlayerController : MonoBehaviour {
 		// the player can move if he's grounded or
 		// if the air control is enabled.
 		if (isGrounded || airControl) {
-			float coeff = 10f;
+			float force = 10f;
 			Vector3 currentVelocity = rb.velocity;
-			Vector3 targetVelocity = new Vector2(move * coeff, rb.velocity.y);
+			Vector3 targetVelocity = new Vector2(move * force, rb.velocity.y);
 
 			rb.velocity = Vector3.SmoothDamp(currentVelocity, targetVelocity, ref velocity, movementSmoothTime);
 		}

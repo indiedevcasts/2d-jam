@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerController))]
 public class PlayerMovement : MonoBehaviour {
 	public PlayerController playerController;
 	[Range(0, 100)][SerializeField] float speed = 30f;
@@ -14,7 +15,6 @@ public class PlayerMovement : MonoBehaviour {
 		if (Input.GetButtonDown("Jump")) {
 			isJumping = true;
 		}
-
 	}
 
 	void FixedUpdate () {
