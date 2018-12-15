@@ -6,12 +6,14 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] LayerMask groundLayer;
 	[SerializeField] Transform groundCheck;
 	[Range(0f, 0.5f)][SerializeField] float groundCheckRadius = .2f;
-	[Range(0, 500f)][SerializeField] float jumpForce = 400f;
+	[Range(0, 1000f)][SerializeField] float jumpForce = 400f;
 	[SerializeField] bool airControl = true;
+	[Range(0, .3f)] [SerializeField] private float movementSmoothTime = .05f;
 	[SerializeField] bool isFacingRight = true;
 	[SerializeField] bool gizmoMode = false;
 	bool isGrounded = true;
 	Rigidbody2D rb;
+	Vector3 velocity = Vector3.zero;
 
 	void Awake() {
 		rb = GetComponent<Rigidbody2D>();
@@ -26,8 +28,10 @@ public class PlayerController : MonoBehaviour {
 		// if the air control is enabled.
 		if (isGrounded || airControl) {
 			float coeff = 10f;
-			Vector3 targetspeed = new Vector2(move * coeff, rb.velocity.y);
-			rb.velocity = targetspeed;
+			Vector3 currentVelocity = rb.velocity;
+			Vector3 targetVelocity = new Vector2(move * coeff, rb.velocity.y);
+
+			rb.velocity = Vector3.SmoothDamp(currentVelocity, targetVelocity, ref velocity, movementSmoothTime);
 		}
 
 		// the player can only jump if he's grounded.
@@ -43,7 +47,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	// Flip the sprite by using the inverse of local scale on x
+	// Flip the sprite by using the inverse of the local scale on x
 	void Flip() {
 		isFacingRight = !isFacingRight;
 		Vector2 localScale = transform.localScale;
@@ -52,8 +56,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	// Debug with a graphical view for the developer.
-	void OnDrawGizmosSelected()
-    {
+	void OnDrawGizmosSelected() {
 		if (gizmoMode) {
 			DrawGroundCheck(groundCheck.position, groundCheckRadius);
 		}
