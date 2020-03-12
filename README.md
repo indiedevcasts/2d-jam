@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://www.patreon.com/indiedevcasts" target="_blank">
+    <a href="https://www.indiedevcasts.com" target="_blank">
         <img src="https://avatars2.githubusercontent.com/u/41526426?s=150"/>
     </a>
 </p>
